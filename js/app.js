@@ -13,6 +13,13 @@ function setupEvents() {
         state.page = 1;
         loadGames();
     };
+    UI.elements.searchInput.onkeydown = (e) => {
+        if (e.key === 'Enter') {
+            state.q = UI.elements.searchInput.value;
+            state.page = 1;
+            loadGames();
+        }
+    };
     UI.elements.sortSelect.onchange = (e) => {
         state.sort = e.target.value;
         state.page = 1;
