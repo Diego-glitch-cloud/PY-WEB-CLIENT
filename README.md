@@ -3,6 +3,7 @@
 Aplicación web interactiva para la gestión de un catálogo de videojuegos. Construida con **HTML5, CSS3 y JavaScript Vanilla** sin frameworks externos. Presenta un diseño moderno "Dark Glassmorphism", animaciones fluidas y comunicación asíncrona con la API REST del backend.
 
 **Repositorio del backend:** https://github.com/Diego-glitch-cloud/PY-WEB-BACKEND  
+**API en producción (Railway):** https://py-web-backend-production.up.railway.app
 **Aplicación en producción (GitHub Pages):** https://diego-glitch-cloud.github.io/PY-WEB-CLIENT/
 
 ---
@@ -10,7 +11,6 @@ Aplicación web interactiva para la gestión de un catálogo de videojuegos. Con
 ## Screenshot
 
 ![Vista Principal de la Aplicación](./docs/screenshots/app-preview.png)
-*(Recuerda reemplazar esta imagen con un screenshot real de tu aplicación tras el despliegue)*
 
 ---
 
@@ -33,12 +33,12 @@ cd PY-WEB-CLIENT
 
 ### 2. Configurar la API URL
 
-Por defecto, el archivo `js/config.js` está preparado para conectarse al backend local o de producción. Para ejecutar contra tu servidor local:
+Por defecto, el archivo `js/config.js` está preparado para conectarse al backend en producción (Railway). Si deseas ejecutar contra tu propio servidor local, debes editarlo:
 
-Editar `js/config.js` y confirmar la URL:
 ```javascript
 const CONFIG = {
-    API_URL: "http://localhost:8080", // O la URL de tu backend en Railway
+    // API_URL: "https://py-web-backend-production.up.railway.app", // Entorno de producción
+    API_URL: "http://localhost:8080", // Descomentar para desarrollo local
     DEFAULT_LIMIT: 12
 };
 ```
@@ -113,3 +113,6 @@ Uno de los principales aprendizajes fue el **manejo manual del estado y del cicl
 Adicionalmente, implementar la lógica de **descarga de archivos (CSV / Excel)** construyendo Blobs desde el navegador fue una lección invaluable sobre el manejo de streams de datos en el cliente. Realizar esto de forma nativa —escapando cadenas de texto manualmente y manipulando esquemas de *Open XML*— demostró el inmenso poder subyacente que tiene JavaScript, demostrando que en muchos casos se abusa del uso de dependencias externas.
 
 Finalmente, diseñar una interfaz premium aplicando tendencias como el *Glassmorphism* y animaciones complejas (transiciones *hover* progresivas y transformaciones `cubic-bezier`) reforzó que la percepción de calidad ("UX/UI") recae enormemente en el pulido de micro-interacciones. Pequeños detalles como deshabilitar el botón de "Guardar" mientras se procesa la solicitud asíncrona o brindar feedback instantáneo mediante *Toasts* son la diferencia fundamental entre un prototipo escolar y una plataforma de uso profesional.
+
+**¿Usaría esta tecnología de nuevo?** 
+Creo que sí lo usaría, pero prefiero utilizar algún framework como react para el desarrollo frontend ya que agiliza mucho el proceso de desarrollo.
