@@ -38,5 +38,19 @@ const API = {
         formData.append('image', file);
         const response = await fetch(`${CONFIG.API_URL}/games/${id}/image`, { method: 'POST', body: formData });
         return await response.json();
+    },
+    async getRatings(id) {
+        const response = await fetch(`${CONFIG.API_URL}/games/${id}/rating`);
+        if (!response.ok) throw new Error('Error al obtener ratings');
+        return await response.json();
+    },
+    async createRating(id, score) {
+        const response = await fetch(`${CONFIG.API_URL}/games/${id}/rating`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ score })
+        });
+        if (!response.ok) throw await response.json();
+        return await response.json();
     }
 };
