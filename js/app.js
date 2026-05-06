@@ -13,6 +13,16 @@ function setupEvents() {
         state.page = 1;
         loadGames();
     };
+    UI.elements.sortSelect.onchange = (e) => {
+        state.sort = e.target.value;
+        state.page = 1;
+        loadGames();
+    };
+    UI.elements.orderSelect.onchange = (e) => {
+        state.order = e.target.value;
+        state.page = 1;
+        loadGames();
+    };
     UI.elements.gameForm.onsubmit = async (e) => {
         e.preventDefault();
         const id = document.getElementById('game-id').value;
