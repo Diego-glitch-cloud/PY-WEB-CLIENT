@@ -48,6 +48,9 @@ function setupEvents() {
         loadGames();
     };
 
+    document.getElementById('export-csv-btn').onclick = () => exportCSV();
+    document.getElementById('export-xlsx-btn').onclick = () => exportXLSX();
+
     UI.elements.gameForm.onsubmit = async (e) => {
         e.preventDefault();
         UI.clearErrors();
@@ -159,4 +162,100 @@ async function handleDelete(id) {
             UI.showToast('Error al eliminar el juego', 'error');
         }
     }
+}
+
+async function exportCSV() {
+    UI.showToast('Preparando CSV...', 'success');
+    try {
+        const res = await API.fetchGames({ ...state, limit: 9999, page: 1 });
+        const games = res.data;
+        
+        const headers = ['ID', 'Título', 'Género', 'Plataforma', 'Desarrollador', 'Año', 'Descripción'];
+        const csvRows = [headers.join(',')];
+
+        for (const g of games) {
+            const row = [
+                g.id,
+                `"${(g.title || '').replace(/"/g, '""')}"`,
+                `"${(g.genre || '').replace(/"/g, '""')}"`,
+                `"${(g.platform || '').replace(/"/g, '""')}"`,
+                `"${(g.developer || '').replace(/"/g, '""')}"`,
+                g.release_year || '',
+                `"${(g.description || '').replace(/"/g, '""')}"`
+            ];
+            csvRows.push(row.join(','));
+        }
+
+        const csvString = csvRows.join('\n');
+        const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'videojuegos.csv');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    } catch (err) {
+        UI.showToast('Error al exportar CSV', 'error');
+    }
+}
+
+async function exportXLSX() {
+    UI.showToast('Generando Excel...', 'success');
+    try {
+        const res = await API.fetchGames({ ...state, limit: 9999, page: 1 });
+        const games = res.data;
+
+        const xmlTemplate = `<?xml version="1.0"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:html="http://www.w3.org/TR/REC-html40">
+ <Worksheet ss:Name="Videojuegos">
+  <Table>
+   <Row>
+    <Cell><Data ss:Type="String">Título</Data></Cell>
+    <Cell><Data ss:Type="String">Género</Data></Cell>
+    <Cell><Data ss:Type="String">Plataforma</Data></Cell>
+    <Cell><Data ss:Type="String">Desarrollador</Data></Cell>
+    <Cell><Data ss:Type="String">Año</Data></Cell>
+   </Row>
+   ${games.map(g => `
+   <Row>
+    <Cell><Data ss:Type="String">${escapeXML(g.title || '')}</Data></Cell>
+    <Cell><Data ss:Type="String">${escapeXML(g.genre || '')}</Data></Cell>
+    <Cell><Data ss:Type="String">${escapeXML(g.platform || '')}</Data></Cell>
+    <Cell><Data ss:Type="String">${escapeXML(g.developer || '')}</Data></Cell>
+    <Cell><Data ss:Type="Number">${g.release_year || 0}</Data></Cell>
+   </Row>`).join('')}
+  </Table>
+ </Worksheet>
+</Workbook>`;
+
+        const blob = new Blob([xmlTemplate], { type: 'application/vnd.ms-excel' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'videojuegos.xls');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    } catch (err) {
+        UI.showToast('Error al exportar Excel', 'error');
+    }
+}
+
+function escapeXML(str) {
+    return str.replace(/[<>&'"]/g, (c) => {
+        switch (c) {
+            case '<': return '&lt;';
+            case '>': return '&gt;';
+            case '&': return '&amp;';
+            case '\'': return '&apos;';
+            case '"': return '&quot;';
+            default: return c;
+        }
+    });
 }

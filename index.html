@@ -26,17 +26,28 @@
     <main class="container">
         <section id="filters-section">
             <div class="filter-group">
-                <label for="sort-select">Ordenar por:</label>
-                <select id="sort-select">
-                    <option value="created_at" selected>Fecha de creación</option>
-                    <option value="title">Título</option>
-                    <option value="release_year">Año de lanzamiento</option>
-                    <option value="genre">Género</option>
-                </select>
-                <select id="order-select">
-                    <option value="desc" selected>Descendente</option>
-                    <option value="asc">Ascendente</option>
-                </select>
+                <div class="select-wrapper">
+                    <label for="sort-select">Ordenar por:</label>
+                    <select id="sort-select">
+                        <option value="created_at" selected>Fecha de creación</option>
+                        <option value="title">Título</option>
+                        <option value="release_year">Año de lanzamiento</option>
+                        <option value="genre">Género</option>
+                    </select>
+                </div>
+                <div class="select-wrapper">
+                    <select id="order-select">
+                        <option value="desc" selected>Descendente</option>
+                        <option value="asc">Ascendente</option>
+                    </select>
+                </div>
+                <div class="results-info">
+                    <span id="results-count">0 videojuegos</span>
+                </div>
+            </div>
+            <div class="export-group">
+                <button id="export-csv-btn" class="btn-secondary">Exportar CSV</button>
+                <button id="export-xlsx-btn" class="btn-secondary">Exportar Excel</button>
             </div>
         </section>
 
