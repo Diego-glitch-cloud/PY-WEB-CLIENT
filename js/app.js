@@ -1,5 +1,15 @@
 const state = { page: 1, limit: 12, q: '', sort: 'created_at', order: 'desc' };
 
+function debounce(fn, delay) {
+    let timeoutId;
+    return function (...args) {
+        if (timeoutId) clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+            fn.apply(this, args);
+        }, delay);
+    };
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     loadGames();
     setupEvents();
@@ -18,13 +28,11 @@ function setupEvents() {
         loadGames();
     };
 
-    UI.elements.searchInput.onkeydown = (e) => {
-        if (e.key === 'Enter') {
-            state.q = UI.elements.searchInput.value;
-            state.page = 1;
-            loadGames();
-        }
-    };
+    UI.elements.searchInput.addEventListener('input', debounce((e) => {
+        state.q = e.target.value;
+        state.page = 1;
+        loadGames();
+    }, 400));
 
     document.onkeydown = (e) => {
         if (e.key === 'Escape' && UI.elements.gameModal.style.display === 'block') {
@@ -35,6 +43,24 @@ function setupEvents() {
     UI.elements.gameModal.onclick = (e) => {
         if (e.target === UI.elements.gameModal) UI.hideModal();
     };
+
+    const imgPreview = document.getElementById('image-preview');
+    const imgUrlInput = document.getElementById('image_url');
+    if (imgUrlInput && imgPreview) {
+        imgUrlInput.addEventListener('input', (e) => {
+            const url = e.target.value.trim();
+            if (url) {
+                imgPreview.src = url;
+                imgPreview.style.display = 'block';
+            } else {
+                imgPreview.style.display = 'none';
+                imgPreview.src = '';
+            }
+        });
+        imgPreview.addEventListener('error', () => {
+            imgPreview.style.display = 'none';
+        });
+    }
 
     UI.elements.sortSelect.onchange = (e) => {
         state.sort = e.target.value;

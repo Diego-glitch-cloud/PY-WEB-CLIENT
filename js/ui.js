@@ -148,8 +148,14 @@ const UI = {
 
     hideModal() {
         this.elements.gameModal.style.display = 'none';
+        this.elements.gameModal.classList.remove('show');
         this.elements.gameForm.reset();
         document.getElementById('game-id').value = '';
+        const imgPreview = document.getElementById('image-preview');
+        if (imgPreview) {
+            imgPreview.style.display = 'none';
+            imgPreview.src = '';
+        }
         this.clearErrors();
     },
 
