@@ -18,9 +18,13 @@ const UI = {
         games.forEach(game => {
             const card = document.createElement('div');
             card.className = 'game-card';
-            const imageUrl = game.image_url.startsWith('http') ? game.image_url : `${CONFIG.API_URL}${game.image_url}`;
+            
+            const imageUrl = game.image_url 
+                ? (game.image_url.startsWith('http') ? game.image_url : `${CONFIG.API_URL}${game.image_url}`)
+                : 'https://via.placeholder.com/300x180';
+
             card.innerHTML = `
-                <img src="${game.image_url ? imageUrl : 'https://via.placeholder.com/300x180'}" class="game-image">
+                <img src="${imageUrl}" class="game-image">
                 <div class="game-info">
                     <h3 class="game-title">${game.title}</h3>
                     <p>${game.genre} | ${game.release_year}</p>

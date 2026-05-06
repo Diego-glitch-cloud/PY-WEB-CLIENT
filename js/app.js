@@ -6,7 +6,10 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function setupEvents() {
-    document.getElementById('add-game-btn').onclick = () => UI.showModal();
+    document.getElementById('add-game-btn').onclick = () => {
+        UI.hideModal();
+        UI.showModal();
+    };
     document.querySelector('.close-modal').onclick = () => UI.hideModal();
     document.getElementById('search-button').onclick = () => {
         state.q = UI.elements.searchInput.value;
@@ -25,6 +28,9 @@ function setupEvents() {
             UI.hideModal();
         }
     };
+    UI.elements.gameModal.onclick = (e) => {
+        if (e.target === UI.elements.gameModal) UI.hideModal();
+    };
     UI.elements.sortSelect.onchange = (e) => {
         state.sort = e.target.value;
         state.page = 1;
@@ -38,12 +44,13 @@ function setupEvents() {
     UI.elements.gameForm.onsubmit = async (e) => {
         e.preventDefault();
         const id = document.getElementById('game-id').value;
+        const releaseYearValue = document.getElementById('release_year').value;
         const data = {
             title: document.getElementById('title').value,
             genre: document.getElementById('genre').value,
             platform: document.getElementById('platform').value,
             developer: document.getElementById('developer').value,
-            release_year: parseInt(document.getElementById('release_year').value) || null,
+            release_year: releaseYearValue.trim() === '' ? null : parseInt(releaseYearValue),
             description: document.getElementById('description').value,
             image_url: document.getElementById('image_url').value
         };
