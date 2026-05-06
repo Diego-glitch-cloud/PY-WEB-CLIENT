@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Game Tracker</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Video Game Tracker</h1>
+            <nav>
+                <div class="search-bar">
+                    <input type="text" id="search-input" placeholder="Buscar juego...">
+                    <button id="search-button">🔍</button>
+                </div>
+                <button id="add-game-btn" class="btn-primary">Añadir Juego</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section id="filters-section">
+            <div class="filter-group">
+                <label for="sort-select">Ordenar por:</label>
+                <select id="sort-select">
+                    <option value="created_at" selected>Fecha de creación</option>
+                    <option value="title">Título</option>
+                    <option value="release_year">Año de lanzamiento</option>
+                    <option value="genre">Género</option>
+                </select>
+                <select id="order-select">
+                    <option value="desc" selected>Descendente</option>
+                    <option value="asc">Ascendente</option>
+                </select>
+            </div>
+        </section>
+
+        <section id="games-section">
+            <div id="games-grid" class="games-grid">
+                <p class="loading">Cargando videojuegos...</p>
+            </div>
+            
+            <div id="pagination" class="pagination"></div>
+        </section>
+    </main>
+
+    <div id="game-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2 id="modal-title">Añadir Nuevo Juego</h2>
+            <form id="game-form">
+                <input type="hidden" id="game-id">
+                <div class="form-group">
+                    <label for="title">Título *</label>
+                    <input type="text" id="title" required maxlength="255">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="genre">Género</label>
+                        <input type="text" id="genre" maxlength="100">
+                    </div>
+                    <div class="form-group">
+                        <label for="platform">Plataforma</label>
+                        <input type="text" id="platform" maxlength="100">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="developer">Desarrollador</label>
+                        <input type="text" id="developer" maxlength="255">
+                    </div>
+                    <div class="form-group">
+                        <label for="release_year">Año</label>
+                        <input type="number" id="release_year" min="1970" max="2030">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="description">Descripción</label>
+                    <textarea id="description" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="image_url">URL de Imagen (opcional)</label>
+                    <input type="url" id="image_url" placeholder="https://...">
+                </div>
+                <div id="image-upload-section" class="form-group">
+                    <label for="image-file">Subir Imagen (Máx 1MB)</label>
+                    <input type="file" id="image-file" accept="image/jpeg,image/png,image/webp">
+                </div>
+                <button type="submit" class="btn-block">Guardar Juego</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
