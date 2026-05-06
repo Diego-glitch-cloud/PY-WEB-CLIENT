@@ -1,3 +1,14 @@
+var PLACEHOLDER_IMG = 'data:image/svg+xml,' + encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 180">' +
+    '<rect width="300" height="180" fill="#e2e8f0"/>' +
+    '<rect x="100" y="58" width="100" height="65" rx="28" stroke="#94a3b8" stroke-width="3" fill="none"/>' +
+    '<line x1="118" y1="90" x2="134" y2="90" stroke="#94a3b8" stroke-width="3" stroke-linecap="round"/>' +
+    '<line x1="126" y1="82" x2="126" y2="98" stroke="#94a3b8" stroke-width="3" stroke-linecap="round"/>' +
+    '<circle cx="164" cy="86" r="4" fill="#94a3b8"/>' +
+    '<circle cx="174" cy="95" r="4" fill="#94a3b8"/>' +
+    '</svg>'
+);
+
 const UI = {
     elements: {
         gamesGrid: document.getElementById('games-grid'),
@@ -22,24 +33,49 @@ const UI = {
             this.renderEmptyState();
             return;
         }
-        games.forEach(game => {
+
+        const EDIT_ICON = `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`;
+        const DELETE_ICON = `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>`;
+        const DEV_ICON = `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>`;
+
+        games.forEach((game, index) => {
             const card = document.createElement('div');
-            card.className = 'game-card';
-            
-            const imageUrl = game.image_url 
+            card.className = 'game-card card-animate';
+            card.style.animationDelay = `${index * 60}ms`;
+
+            const imageUrl = game.image_url
                 ? (game.image_url.startsWith('http') ? game.image_url : `${CONFIG.API_URL}${game.image_url}`)
-                : 'https://via.placeholder.com/300x180';
+                : PLACEHOLDER_IMG;
+
+            const badges = [
+                game.platform ? `<span class="badge badge-platform">${game.platform}</span>` : '',
+                game.genre    ? `<span class="badge badge-genre">${game.genre}</span>`       : ''
+            ].filter(Boolean).join('');
 
             card.innerHTML = `
-                <img src="${imageUrl}" class="game-image">
+                <div class="card-image-wrapper">
+                    <img src="${imageUrl}" class="game-image" loading="lazy" alt="${game.title}"
+                        onerror="this.onerror=null;this.src=PLACEHOLDER_IMG">
+                </div>
                 <div class="game-info">
+                    ${badges ? `<div class="card-badges">${badges}</div>` : ''}
                     <h3 class="game-title">${game.title}</h3>
-                    <p>${game.genre} | ${game.release_year}</p>
+                    <p class="card-meta">
+                        ${DEV_ICON}
+                        <span>${game.developer || 'Desarrollador desconocido'}</span>
+                        ${game.release_year ? `<span class="card-year">${game.release_year}</span>` : ''}
+                    </p>
+                    ${game.description ? `<p class="card-description">${game.description}</p>` : ''}
                 </div>
                 <div class="game-actions">
-                    <button class="btn-primary" onclick="handleEdit(${game.id})">Editar</button>
-                    <button class="btn-danger" onclick="handleDelete(${game.id})">Eliminar</button>
+                    <button class="btn-edit" aria-label="Editar ${game.title}" onclick="handleEdit(${game.id})">
+                        ${EDIT_ICON} Editar
+                    </button>
+                    <button class="btn-danger" aria-label="Eliminar ${game.title}" onclick="handleDelete(${game.id})">
+                        ${DELETE_ICON} Eliminar
+                    </button>
                 </div>`;
+
             this.elements.gamesGrid.appendChild(card);
         });
     },
