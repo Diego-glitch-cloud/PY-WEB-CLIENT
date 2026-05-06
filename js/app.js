@@ -20,6 +20,11 @@ function setupEvents() {
             loadGames();
         }
     };
+    document.onkeydown = (e) => {
+        if (e.key === 'Escape' && UI.elements.gameModal.style.display === 'block') {
+            UI.hideModal();
+        }
+    };
     UI.elements.sortSelect.onchange = (e) => {
         state.sort = e.target.value;
         state.page = 1;
