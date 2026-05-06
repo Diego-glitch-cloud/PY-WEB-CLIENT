@@ -49,7 +49,7 @@ function setupEvents() {
     if (imgUrlInput && imgPreview) {
         imgUrlInput.addEventListener('input', (e) => {
             const url = e.target.value.trim();
-            if (url) {
+            if (url && (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:'))) {
                 imgPreview.src = url;
                 imgPreview.style.display = 'block';
             } else {
@@ -176,7 +176,10 @@ async function handleEdit(id) {
         document.getElementById('developer').value = g.developer;
         document.getElementById('release_year').value = g.release_year || '';
         document.getElementById('description').value = g.description;
-        document.getElementById('image_url').value = g.image_url;
+        
+        const urlInput = document.getElementById('image_url');
+        urlInput.value = g.image_url || '';
+        urlInput.dispatchEvent(new Event('input'));
     } catch (err) {
         UI.showToast('Error al cargar el detalle del juego', 'error');
     }
