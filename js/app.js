@@ -151,7 +151,8 @@ async function loadGames() {
 
 async function handleRate(gameId, score) {
     try {
-        const result = await API.createRating(gameId, score);
+        await API.createRating(gameId, score);
+        const result = await API.getRatings(gameId);
         UI.updateStarRating(gameId, result.average, result.count);
         UI.showToast('¡Calificación guardada!', 'success');
     } catch (err) {
