@@ -48,6 +48,14 @@ function setupEvents() {
         loadGames();
     };
 
+    if (UI.elements.limitSelect) {
+        UI.elements.limitSelect.onchange = (e) => {
+            state.limit = parseInt(e.target.value);
+            state.page = 1;
+            loadGames();
+        };
+    }
+
     document.getElementById('export-csv-btn').onclick = () => exportCSV();
     document.getElementById('export-xlsx-btn').onclick = () => exportXLSX();
 
@@ -99,6 +107,7 @@ async function loadGames() {
         const res = await API.fetchGames(state);
         UI.renderGames(res.data);
         UI.renderPagination(res.page, res.total_pages);
+        UI.updateResultsCount(res.total);
 
         Promise.all(
             res.data.map(g => API.getRatings(g.id).catch(() => null))

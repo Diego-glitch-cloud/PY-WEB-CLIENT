@@ -62,10 +62,7 @@ header h1 {
     gap: 0.75rem;
 }
 
-header h1::before {
-    content: '🎮';
-    font-size: 1.5rem;
-}
+
 
 nav { display: flex; align-items: center; gap: 1.5rem; }
 
@@ -106,6 +103,9 @@ nav { display: flex; align-items: center; gap: 1.5rem; }
     cursor: pointer;
     font-size: 1rem;
     transition: background var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .search-bar button:hover { background-color: var(--primary-hover); }
@@ -139,6 +139,48 @@ nav { display: flex; align-items: center; gap: 1.5rem; }
     border: 1px solid var(--border-color);
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.select-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.select-wrapper label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-muted);
+}
+
+.select-wrapper select {
+    padding: 0.4rem 0.8rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-color);
+    background: white;
+    font-family: inherit;
+    color: var(--text-main);
+    cursor: pointer;
+}
+
+.results-info {
+    font-weight: 600;
+    color: var(--primary-color);
+    background: var(--primary-light);
+    padding: 0.4rem 0.8rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.9rem;
 }
 
 .games-grid {
@@ -241,6 +283,62 @@ nav { display: flex; align-items: center; gap: 1.5rem; }
     border-radius: 12px;
     width: 90%;
     max-width: 600px;
+}
+
+@keyframes modalSlideIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.modal.show .modal-content {
+    animation: modalSlideIn 0.3s ease forwards;
+}
+
+.form-group {
+    margin-bottom: 1.2rem;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+    color: var(--text-main);
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 1rem;
+    transition: all var(--transition-fast);
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+#game-form .btn-block {
+    padding: 0.875rem;
+    font-size: 1.05rem;
+    background: linear-gradient(135deg, var(--primary-color) 0%, #3730a3 100%);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+#game-form .btn-block:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
 }
 
 .pagination { display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 4rem; }
@@ -439,4 +537,88 @@ nav { display: flex; align-items: center; gap: 1.5rem; }
     font-size: 0.8rem;
     margin-top: 0.25rem;
     font-weight: 500;
+}
+
+/* Footer (T-42) */
+.site-footer {
+    background: #0f172a;
+    color: var(--text-muted);
+    padding: 2rem 0;
+    margin-top: 4rem;
+    text-align: center;
+}
+
+.site-footer .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.site-footer p {
+    color: #94a3b8;
+}
+
+.swagger-link {
+    color: var(--primary-light);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color var(--transition-fast);
+}
+
+.swagger-link:hover {
+    color: white;
+    text-decoration: underline;
+}
+
+/* Responsive (T-44) */
+@media (max-width: 768px) {
+    header .container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .search-bar {
+        width: 100%;
+    }
+    
+    .search-bar input {
+        width: 100%;
+    }
+
+    #filters-section {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .filter-group {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .select-wrapper {
+        width: 100%;
+    }
+    
+    .select-wrapper select {
+        width: 100%;
+    }
+
+    .games-grid {
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    }
+
+    .modal-content {
+        width: 95%;
+        margin: 2% auto;
+        padding: 1.5rem;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .page-btn:not(:first-child):not(:last-child):not(.active) {
+        display: none;
+    }
 }

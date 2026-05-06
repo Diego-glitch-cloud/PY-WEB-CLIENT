@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,14 +10,31 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
 </head>
+
 <body>
     <header>
         <div class="container">
-            <h1>Video Game Tracker</h1>
+            <h1>
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="6" y1="12" x2="10" y2="12"></line>
+                    <line x1="8" y1="10" x2="8" y2="14"></line>
+                    <line x1="15" y1="13" x2="15.01" y2="13"></line>
+                    <line x1="18" y1="11" x2="18.01" y2="11"></line>
+                    <rect x="2" y="6" width="20" height="12" rx="2"></rect>
+                </svg>
+                Video Game Tracker
+            </h1>
             <nav>
                 <div class="search-bar">
                     <input type="text" id="search-input" placeholder="Buscar juego...">
-                    <button id="search-button">🔍</button>
+                    <button id="search-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                    </button>
                 </div>
                 <button id="add-game-btn" class="btn-primary">Añadir Juego</button>
             </nav>
@@ -26,6 +44,14 @@
     <main class="container">
         <section id="filters-section">
             <div class="filter-group">
+                <div class="select-wrapper">
+                    <label for="limit-select">Por página:</label>
+                    <select id="limit-select">
+                        <option value="6">6</option>
+                        <option value="12" selected>12</option>
+                        <option value="24">24</option>
+                    </select>
+                </div>
                 <div class="select-wrapper">
                     <label for="sort-select">Ordenar por:</label>
                     <select id="sort-select">
@@ -55,16 +81,23 @@
             <div id="games-grid" class="games-grid">
                 <p class="loading">Cargando videojuegos...</p>
             </div>
-            
+
             <div id="pagination" class="pagination"></div>
         </section>
     </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>Video Game Tracker · Proyecto Web UVG 2025</p>
+            <a href="http://localhost:8080/swagger/index.html" target="_blank" class="swagger-link">Ver Documentación de API (Swagger)</a>
+        </div>
+    </footer>
 
     <div id="game-modal" class="modal">
         <div class="modal-content">
             <span class="close-modal">&times;</span>
             <h2 id="modal-title">Añadir Nuevo Juego</h2>
-            <form id="game-form">
+            <form id="game-form">y
                 <input type="hidden" id="game-id">
                 <div class="form-group">
                     <label for="title">Título *</label>
@@ -125,4 +158,5 @@
     <script src="js/ui.js"></script>
     <script src="js/app.js"></script>
 </body>
+
 </html>

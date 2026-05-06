@@ -19,6 +19,7 @@ const UI = {
         searchInput: document.getElementById('search-input'),
         sortSelect: document.getElementById('sort-select'),
         orderSelect: document.getElementById('order-select'),
+        limitSelect: document.getElementById('limit-select'),
         toastContainer: document.getElementById('toast-container'),
         confirmModal: document.getElementById('confirm-modal'),
         confirmTitle: document.getElementById('confirm-title'),
@@ -89,13 +90,54 @@ const UI = {
         this.elements.pagination.innerHTML = '';
         if (total <= 1) return;
 
-        for (let i = 1; i <= total; i++) {
+        const createBtn = (text, page, disabled = false, isCurrent = false) => {
             const btn = document.createElement('button');
-            btn.className = `page-btn ${i === current ? 'active' : ''}`;
-            btn.innerText = i;
-            btn.onclick = () => changePage(i);
-            this.elements.pagination.appendChild(btn);
+            btn.className = `page-btn ${isCurrent ? 'active' : ''}`;
+            btn.innerText = text;
+            if (disabled) {
+                btn.disabled = true;
+                btn.style.opacity = '0.5';
+                btn.style.cursor = 'not-allowed';
+            } else if (page !== null) {
+                btn.onclick = () => changePage(page);
+            }
+            return btn;
+        };
+
+        this.elements.pagination.appendChild(createBtn('← Anterior', current - 1, current === 1));
+
+        if (total <= 7) {
+            for (let i = 1; i <= total; i++) {
+                this.elements.pagination.appendChild(createBtn(i, i, false, i === current));
+            }
+        } else {
+            this.elements.pagination.appendChild(createBtn(1, 1, false, current === 1));
+            
+            if (current > 3) {
+                const ellipsis = document.createElement('span');
+                ellipsis.className = 'page-ellipsis';
+                ellipsis.innerText = '...';
+                this.elements.pagination.appendChild(ellipsis);
+            }
+
+            const start = Math.max(2, current - 1);
+            const end = Math.min(total - 1, current + 1);
+
+            for (let i = start; i <= end; i++) {
+                this.elements.pagination.appendChild(createBtn(i, i, false, i === current));
+            }
+
+            if (current < total - 2) {
+                const ellipsis = document.createElement('span');
+                ellipsis.className = 'page-ellipsis';
+                ellipsis.innerText = '...';
+                this.elements.pagination.appendChild(ellipsis);
+            }
+
+            this.elements.pagination.appendChild(createBtn(total, total, false, current === total));
         }
+
+        this.elements.pagination.appendChild(createBtn('Siguiente →', current + 1, current === total));
     },
 
     showModal(title = 'Añadir Juego') {
