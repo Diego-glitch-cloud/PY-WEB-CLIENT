@@ -221,18 +221,26 @@ const UI = {
         container.appendChild(this.createStarRating(gameId, average, count));
     },
 
-    showFieldError(fieldName, message) {
-        const input = document.getElementById(fieldName);
-        if (!input) return;
-
-        input.classList.add('input-error');
-        const errorMsg = document.createElement('p');
-        errorMsg.className = 'field-error';
-        errorMsg.innerText = message;
-        input.parentElement.appendChild(errorMsg);
+    showFieldError: (fieldId, message) => {
+        const input = document.getElementById(fieldId);
+        if (input) {
+            input.classList.add('input-error');
+            const errorMsg = document.createElement('p');
+            errorMsg.className = 'field-error';
+            errorMsg.innerText = message;
+            input.parentNode.appendChild(errorMsg);
+        }
     },
 
-    clearErrors() {
+    updateResultsCount: (count) => {
+        const el = document.getElementById('results-count');
+        if (el) {
+            el.innerText = `${count} ${count === 1 ? 'videojuego' : 'videojuegos'}`;
+        }
+    },
+
+    clearErrors: () => {
+
         document.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
         document.querySelectorAll('.field-error').forEach(el => el.remove());
     }
