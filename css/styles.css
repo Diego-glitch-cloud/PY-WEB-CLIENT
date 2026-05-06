@@ -342,6 +342,41 @@ nav { display: flex; align-items: center; gap: 1.5rem; }
 
 .btn-danger:hover { background-color: var(--danger-hover); }
 
+/* Star Rating (T-25) */
+.card-rating {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 1.75rem;
+}
+
+.stars-container {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.05rem;
+}
+
+.star {
+    font-size: 1.15rem;
+    color: #d1d5db;
+    cursor: pointer;
+    transition: color var(--transition-fast), transform var(--transition-fast);
+    line-height: 1;
+    user-select: none;
+}
+
+.star.filled  { color: #f59e0b; }
+.star.hovered { color: #fbbf24; transform: scale(1.2); }
+
+.rating-info {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
 /* Input Error (T-14) */
 .input-error {
     border-color: var(--danger) !important;

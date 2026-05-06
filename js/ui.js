@@ -66,6 +66,7 @@ const UI = {
                         ${game.release_year ? `<span class="card-year">${game.release_year}</span>` : ''}
                     </p>
                     ${game.description ? `<p class="card-description">${game.description}</p>` : ''}
+                    <div class="card-rating" data-game-id="${game.id}"></div>
                 </div>
                 <div class="game-actions">
                     <button class="btn-edit" aria-label="Editar ${game.title}" onclick="handleEdit(${game.id})">
@@ -75,6 +76,10 @@ const UI = {
                         ${DELETE_ICON} Eliminar
                     </button>
                 </div>`;
+
+            card.querySelector('.card-rating').appendChild(
+                this.createStarRating(game.id, 0, 0)
+            );
 
             this.elements.gamesGrid.appendChild(card);
         });
@@ -166,6 +171,54 @@ const UI = {
             this.elements.confirmOk.addEventListener('click', onOk);
             this.elements.confirmCancel.addEventListener('click', onCancel);
         });
+    },
+
+    createStarRating(gameId, average, count) {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'stars-container';
+
+        const filled = Math.round(average);
+        const stars = [];
+
+        for (let i = 1; i <= 5; i++) {
+            const star = document.createElement('span');
+            star.className = 'star' + (i <= filled ? ' filled' : '');
+            star.textContent = '★';
+            star.setAttribute('aria-label', `Calificar ${i} de 5`);
+            star.setAttribute('role', 'button');
+            star.setAttribute('tabindex', '0');
+
+            star.addEventListener('mouseenter', () => {
+                stars.forEach((s, idx) => s.classList.toggle('hovered', idx < i));
+            });
+            star.addEventListener('click', () => handleRate(gameId, i));
+            star.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') handleRate(gameId, i);
+            });
+
+            stars.push(star);
+            wrapper.appendChild(star);
+        }
+
+        wrapper.addEventListener('mouseleave', () => {
+            stars.forEach(s => s.classList.remove('hovered'));
+        });
+
+        const info = document.createElement('span');
+        info.className = 'rating-info';
+        info.textContent = count > 0 ? `${parseFloat(average).toFixed(1)} (${count})` : 'Sin calificar';
+        wrapper.appendChild(info);
+
+        return wrapper;
+    },
+
+    updateStarRating(gameId, average, count) {
+        const container = this.elements.gamesGrid.querySelector(
+            `.card-rating[data-game-id="${gameId}"]`
+        );
+        if (!container) return;
+        container.innerHTML = '';
+        container.appendChild(this.createStarRating(gameId, average, count));
     },
 
     showFieldError(fieldName, message) {

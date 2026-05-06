@@ -96,8 +96,28 @@ async function loadGames() {
         const res = await API.fetchGames(state);
         UI.renderGames(res.data);
         UI.renderPagination(res.page, res.total_pages);
+
+        Promise.all(
+            res.data.map(g => API.getRatings(g.id).catch(() => null))
+        ).then(ratings => {
+            res.data.forEach((game, i) => {
+                if (ratings[i]) {
+                    UI.updateStarRating(game.id, ratings[i].average, ratings[i].count);
+                }
+            });
+        });
     } catch (err) {
         UI.showToast('Error al cargar los juegos', 'error');
+    }
+}
+
+async function handleRate(gameId, score) {
+    try {
+        const result = await API.createRating(gameId, score);
+        UI.updateStarRating(gameId, result.average, result.count);
+        UI.showToast('¡Calificación guardada!', 'success');
+    } catch (err) {
+        UI.showToast('Error al guardar la calificación', 'error');
     }
 }
 
